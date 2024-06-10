@@ -1,0 +1,10 @@
+[huawei]
+ak = ""
+sk = ""
+region = "cn-southwest-2"
+endpoint = "https://cloudbuild-ext.cn-southwest-2.myhuaweicloud.com"
+
+[[jobs]]
+repo = "plat-frontend-org/front_h5_project"
+name = "front_h5_project_staging"
+branch = "staging"
