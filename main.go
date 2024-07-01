@@ -79,7 +79,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("收到请求Repo:%s, Branch:%s\n", data.Repository.FullName, data.Ref)
 	for _, job := range config.Jobs {
 		if job.Repo == data.Repository.FullName && "refs/heads/"+job.Branch == data.Ref {
-			stopOtherJob()
+			stopOtherJob(job.Name)
 			log.Printf("执行任务:%s\n", job.Name)
 			go run(job.Name, job.Branch)
 		}
@@ -87,10 +87,13 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "OK!")
 }
 
-func stopOtherJob() {
+func stopOtherJob(name string) {
 	mtux.Lock()
 	defer mtux.Unlock()
 	for index, job := range jobsing {
+		if job.JobName != name {
+			return
+		}
 		status, err := getJobStatus(job.JobId)
 		if err != nil {
 			log.Println(err)
@@ -138,8 +141,9 @@ func run(name string, branch string) {
 		log.Println("任务执行成功")
 		mtux.Lock()
 		jobsing = append(jobsing, Jobsing{
-			Number: int32(number),
-			JobId:  id,
+			Number:  int32(number),
+			JobName: name,
+			JobId:   id,
 		})
 		mtux.Unlock()
 	}

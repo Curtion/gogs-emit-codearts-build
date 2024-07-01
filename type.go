@@ -26,6 +26,7 @@ type GogsWebhook struct {
 }
 
 type Jobsing struct {
-	Number int32
-	JobId  string
+	Number  int32
+	JobName string
+	JobId   string
 }
