@@ -4,4 +4,4 @@
 
 设置Gogs Webhook，URL为`http://yourdomain:port/webhook`
 
-程序未校验密钥, 请自动保证Webhook安全性
+程序未校验密钥, 请自行保证Webhook安全性
